@@ -63,7 +63,6 @@ public class CartPage extends AbsBasePage {
         waiter.waitForCondition(ExpectedConditions.elementToBeClickable(cartButton));
         cartButton.click();
 
-        //waiter.waitForCondition(ExpectedConditions.visibilityOf(productsTable));
         waiter.waitForCondition(ExpectedConditions.visibilityOf(samsungPrice));
         String phonePriceOnTable = samsungPrice.getText().replaceAll("[^0-9]", "");
 
@@ -115,11 +114,11 @@ public class CartPage extends AbsBasePage {
         String confirmationText = confirmationDetails.getText();
 
         String[] lines = confirmationText.split("\n");
-        String orderDateLine = lines[lines.length - 1]; // Обычно дата в последней строке
-        String orderDate = orderDateLine.replace("Date: ", "").trim(); // Убираем лишние слова
+        String orderDateLine = lines[lines.length - 1];
+        String orderDate = orderDateLine.replace("Date: ", "").trim();
 
         LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy"); // Формат даты
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
         Assertions.assertEquals(currentDate.format(formatter), orderDate, "Дата заказа не совпадает с текущей");
     }
