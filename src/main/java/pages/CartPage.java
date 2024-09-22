@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
@@ -59,7 +60,7 @@ public class CartPage extends AbsBasePage {
     WebElement confirmationDetails;
 
     @Step("Переходим в корзину и проверяем, что общая цена посчитана верно")
-    public void CheckTotalPriceInCart(){
+    public void CheckTotalPriceInCart() {
         waiter.waitForCondition(ExpectedConditions.elementToBeClickable(cartButton));
         cartButton.click();
 
@@ -79,6 +80,13 @@ public class CartPage extends AbsBasePage {
         double actualTotalPrice = Double.parseDouble(totalPrice.getText().replaceAll("[^0-9]", ""));
 
         Assertions.assertEquals(expectedTotalPrice, actualTotalPrice, "Цены не совпадают");
+
+        logTotalPriceCheck(expectedTotalPrice, actualTotalPrice);
+    }
+
+    private void logTotalPriceCheck(double expectedTotalPrice, double actualTotalPrice) {
+        Allure.addAttachment("Проверка общей цены",
+                String.format("Ожидаемая цена: %s, Фактическая цена: %s", expectedTotalPrice, actualTotalPrice));
     }
     @Step("Оформляем заказ")
     public void PlaceOrder(String name, String country, String city, String card) {

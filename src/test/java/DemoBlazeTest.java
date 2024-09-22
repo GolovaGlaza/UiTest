@@ -1,9 +1,7 @@
-import com.github.javafaker.Faker;
+
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
-import io.qameta.allure.junit5.AllureJunit5;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import pages.CartPage;
 import pages.LoginUpModal;
 import pages.ProductsPage;

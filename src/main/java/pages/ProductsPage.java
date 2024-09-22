@@ -63,107 +63,145 @@ public class ProductsPage extends AbsBasePage {
     @FindBy(xpath = "//h3[@class='price-container']")
     WebElement appleMonitorPriceInCard;
 
-    @Step("Добавляем телефон в корзину и проверяем цену")
+    @Step("Добавляем телефон в корзину и проверяем цену: цена в списке {priceInList}, цена в корзине {priceInCard}")
     public void AddPhoneToCartAndCheckPrice() {
         for (int i = 0; i < 3; i++) {
             try {
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(phonesCategoryButton));
-                phonesCategoryButton.click();
+                String priceInList = getPhonePriceInList();
+                String priceInCard = getPhonePriceInCard();
+                checkPrice(priceInList, priceInCard);
 
-                waiter.waitForCondition(ExpectedConditions.visibilityOf(samsungPriceInList));
-                String priceInList = samsungPriceInList.getText().replaceAll("[^0-9]", "");
-
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(samsungGalaxy6Card));
-                samsungGalaxy6Card.click();
-
-                waiter.waitForCondition(ExpectedConditions.visibilityOf(samsungPriceInCard));
-                String priceInCard = samsungPriceInCard.getText().replaceAll("[^0-9]", "");
-
-                Assertions.assertEquals(priceInList, priceInCard, "Цена на карточке товара не соответствует общей цене в корзине");
-
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(addPhoneToCartButton));
-                addPhoneToCartButton.click();
-
-                waiter.waitForCondition(ExpectedConditions.alertIsPresent());
-                Alert alert = driver.switchTo().alert();
-                alert.accept();
-
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(homeButton));
-                homeButton.click();
-
-                break;
-            } catch (StaleElementReferenceException e) {
-                System.out.println("Поймано исключение StaleElementReferenceException. Повторяем попытку...");
-            }
-        }
-    }
-    @Step("Добавляем ноутбук в корзину и проверям цену")
-    public void AddLaptopToCartAndCheckPrice(){
-        for (int i =0; i < 3; i++) {
-            try{
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(laptopsCategoryButton));
-                laptopsCategoryButton.click();
-
-                waiter.waitForCondition(ExpectedConditions.visibilityOf(sonyVaioPriceInList));
-                String priceInList = sonyVaioPriceInList.getText().replaceAll("[^0-9]", "");
-
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(sonyVaioI5Card));
-                sonyVaioI5Card.click();
-
-                waiter.waitForCondition(ExpectedConditions.visibilityOf(sonyVaioPriceInCard));
-                String priceInCard = sonyVaioPriceInCard.getText().replaceAll("[^0-9]", "");
-
-                Assertions.assertEquals(priceInList, priceInCard, "Цена на карточке товара не соответствует общей цене в корзине");
-
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(addLaptopToCartButton));
-                addLaptopToCartButton.click();
-
-                waiter.waitForCondition(ExpectedConditions.alertIsPresent());
-                Alert alert = driver.switchTo().alert();
-                alert.accept();
-
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(homeButton));
-                homeButton.click();
-
-                break;
+                addPhoneToCart();
+                break; // выход из цикла при успешном выполнении
             } catch (StaleElementReferenceException e) {
                 System.out.println("Поймано исключение StaleElementReferenceException. Повторяем попытку...");
             }
         }
     }
 
-    @Step("Добавляем монитор в корзину и проверяем цену")
-    public void AddMonitorToCartAndCheckPrice(){
+    private String getPhonePriceInList() {
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(phonesCategoryButton));
+        phonesCategoryButton.click();
+
+        waiter.waitForCondition(ExpectedConditions.visibilityOf(samsungPriceInList));
+        return samsungPriceInList.getText().replaceAll("[^0-9]", "");
+    }
+
+    private String getPhonePriceInCard() {
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(samsungGalaxy6Card));
+        samsungGalaxy6Card.click();
+
+        waiter.waitForCondition(ExpectedConditions.visibilityOf(samsungPriceInCard));
+        return samsungPriceInCard.getText().replaceAll("[^0-9]", "");
+    }
+
+    private void checkPrice(String priceInList, String priceInCard) {
+        Assertions.assertEquals(priceInList, priceInCard, "Цена на карточке товара не соответствует общей цене в корзине");
+        logPriceCheck(priceInList, priceInCard);
+    }
+
+    @Step("Проверка цен: цена в списке {priceInList}, цена в корзине {priceInCard}")
+    private void logPriceCheck(String priceInList, String priceInCard) {
+        // Этот метод будет записан в отчет
+    }
+
+    private void addPhoneToCart() {
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(addPhoneToCartButton));
+        addPhoneToCartButton.click();
+
+        waiter.waitForCondition(ExpectedConditions.alertIsPresent());
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(homeButton));
+        homeButton.click();
+    }
+
+    @Step("Добавляем ноутбук в корзину и проверяем цену: цена в списке {priceInList}, цена в корзине {priceInCard}")
+    public void AddLaptopToCartAndCheckPrice() {
         for (int i = 0; i < 3; i++) {
-            try{
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(monitorsCategoryButton));
-                monitorsCategoryButton.click();
+            try {
+                String priceInList = getLaptopPriceInList();
+                String priceInCard = getLaptopPriceInCard();
+                checkPrice(priceInList, priceInCard);
 
-                waiter.waitForCondition(ExpectedConditions.visibilityOf(appleMonitorPriceInList));
-                String priceInList = appleMonitorPriceInList.getText().replaceAll("[^0-9]", "");
-
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(appleMonitor23Card));
-                appleMonitor23Card.click();
-
-                waiter.waitForCondition(ExpectedConditions.visibilityOf(appleMonitorPriceInCard));
-                String priceInCard = appleMonitorPriceInCard.getText().replaceAll("[^0-9]", "");
-
-                Assertions.assertEquals(priceInList, priceInCard, "Цена на карточке товара не соответствует общей цене в корзине");
-
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(addMonitorToCartButton));
-                addMonitorToCartButton.click();
-
-                waiter.waitForCondition(ExpectedConditions.alertIsPresent());
-                Alert alert = driver.switchTo().alert();
-                alert.accept();
-
-                waiter.waitForCondition(ExpectedConditions.elementToBeClickable(homeButton));
-                homeButton.click();
-
-                break;
+                addLaptopToCart();
+                break; // выход из цикла при успешном выполнении
             } catch (StaleElementReferenceException e) {
                 System.out.println("Поймано исключение StaleElementReferenceException. Повторяем попытку...");
             }
         }
+    }
+
+    private String getLaptopPriceInList() {
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(laptopsCategoryButton));
+        laptopsCategoryButton.click();
+
+        waiter.waitForCondition(ExpectedConditions.visibilityOf(sonyVaioPriceInList));
+        return sonyVaioPriceInList.getText().replaceAll("[^0-9]", "");
+    }
+
+    private String getLaptopPriceInCard() {
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(sonyVaioI5Card));
+        sonyVaioI5Card.click();
+
+        waiter.waitForCondition(ExpectedConditions.visibilityOf(sonyVaioPriceInCard));
+        return sonyVaioPriceInCard.getText().replaceAll("[^0-9]", "");
+    }
+
+    private void addLaptopToCart() {
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(addLaptopToCartButton));
+        addLaptopToCartButton.click();
+
+        waiter.waitForCondition(ExpectedConditions.alertIsPresent());
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(homeButton));
+        homeButton.click();
+    }
+
+    @Step("Добавляем монитор в корзину и проверяем цену: цена в списке {priceInList}, цена в корзине {priceInCard}")
+    public void AddMonitorToCartAndCheckPrice() {
+        for (int i = 0; i < 3; i++) {
+            try {
+                String priceInList = getMonitorPriceInList();
+                String priceInCard = getMonitorPriceInCard();
+                checkPrice(priceInList, priceInCard);
+
+                addMonitorToCart();
+                break; // выход из цикла при успешном выполнении
+            } catch (StaleElementReferenceException e) {
+                System.out.println("Поймано исключение StaleElementReferenceException. Повторяем попытку...");
+            }
+        }
+    }
+
+    private String getMonitorPriceInList() {
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(monitorsCategoryButton));
+        monitorsCategoryButton.click();
+
+        waiter.waitForCondition(ExpectedConditions.visibilityOf(appleMonitorPriceInList));
+        return appleMonitorPriceInList.getText().replaceAll("[^0-9]", "");
+    }
+
+    private String getMonitorPriceInCard() {
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(appleMonitor23Card));
+        appleMonitor23Card.click();
+
+        waiter.waitForCondition(ExpectedConditions.visibilityOf(appleMonitorPriceInCard));
+        return appleMonitorPriceInCard.getText().replaceAll("[^0-9]", "");
+    }
+
+    private void addMonitorToCart() {
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(addMonitorToCartButton));
+        addMonitorToCartButton.click();
+
+        waiter.waitForCondition(ExpectedConditions.alertIsPresent());
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+
+        waiter.waitForCondition(ExpectedConditions.elementToBeClickable(homeButton));
+        homeButton.click();
     }
 }
