@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.Alert;
@@ -63,7 +64,7 @@ public class ProductsPage extends AbsBasePage {
     @FindBy(xpath = "//h3[@class='price-container']")
     WebElement appleMonitorPriceInCard;
 
-    @Step("Добавляем телефон в корзину и проверяем цену: цена в списке {priceInList}, цена в корзине {priceInCard}")
+    @Step("Добавляем телефон в корзину и проверяем цену:")
     public void AddPhoneToCartAndCheckPrice() {
         for (int i = 0; i < 3; i++) {
             try {
@@ -72,7 +73,7 @@ public class ProductsPage extends AbsBasePage {
                 checkPrice(priceInList, priceInCard);
 
                 addPhoneToCart();
-                break; // выход из цикла при успешном выполнении
+                break;
             } catch (StaleElementReferenceException e) {
                 System.out.println("Поймано исключение StaleElementReferenceException. Повторяем попытку...");
             }
@@ -102,7 +103,8 @@ public class ProductsPage extends AbsBasePage {
 
     @Step("Проверка цен: цена в списке {priceInList}, цена в корзине {priceInCard}")
     private void logPriceCheck(String priceInList, String priceInCard) {
-        // Этот метод будет записан в отчет
+        Allure.addAttachment("Проверка общей цены",
+                String.format("Ожидаемая цена: %s, Фактическая цена: %s", priceInList, priceInCard));
     }
 
     private void addPhoneToCart() {
@@ -117,7 +119,7 @@ public class ProductsPage extends AbsBasePage {
         homeButton.click();
     }
 
-    @Step("Добавляем ноутбук в корзину и проверяем цену: цена в списке {priceInList}, цена в корзине {priceInCard}")
+    @Step("Добавляем ноутбук в корзину и проверяем цену")
     public void AddLaptopToCartAndCheckPrice() {
         for (int i = 0; i < 3; i++) {
             try {
@@ -126,7 +128,7 @@ public class ProductsPage extends AbsBasePage {
                 checkPrice(priceInList, priceInCard);
 
                 addLaptopToCart();
-                break; // выход из цикла при успешном выполнении
+                break;
             } catch (StaleElementReferenceException e) {
                 System.out.println("Поймано исключение StaleElementReferenceException. Повторяем попытку...");
             }
@@ -161,7 +163,7 @@ public class ProductsPage extends AbsBasePage {
         homeButton.click();
     }
 
-    @Step("Добавляем монитор в корзину и проверяем цену: цена в списке {priceInList}, цена в корзине {priceInCard}")
+    @Step("Добавляем монитор в корзину и проверяем цену")
     public void AddMonitorToCartAndCheckPrice() {
         for (int i = 0; i < 3; i++) {
             try {
@@ -170,7 +172,7 @@ public class ProductsPage extends AbsBasePage {
                 checkPrice(priceInList, priceInCard);
 
                 addMonitorToCart();
-                break; // выход из цикла при успешном выполнении
+                break;
             } catch (StaleElementReferenceException e) {
                 System.out.println("Поймано исключение StaleElementReferenceException. Повторяем попытку...");
             }

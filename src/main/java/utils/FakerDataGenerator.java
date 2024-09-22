@@ -33,5 +33,8 @@ public class FakerDataGenerator {
     public String generateCreditCard() {
         return faker.finance().creditCard();
     }
+
+    public String gerateMonth(){
+    }
 }
 
